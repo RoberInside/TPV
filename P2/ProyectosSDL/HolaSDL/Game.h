@@ -3,8 +3,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <list>
 //User Libraries
 #include <SDL.h>
+#include "GameObject.h"
 #include "Ghost.h"
 #include "Pacman.h"
 #include "GameMap.h"
@@ -43,10 +45,15 @@ private:
 
 	void setSuperPacman();
 
+	bool save(const std::string& path);
+	bool load(const std::string& path);
+
 	SDL_Window * window;
 	SDL_Renderer* renderer;
 
 	bool error, exit, gameover, win, pause;
+
+	std::list<GameObject*> objects;
 
 	Ghost* ghosts[NGHOSTS];
 	Pacman* pacman;
@@ -56,7 +63,7 @@ private:
 	const int HEIGHT = 600;
 	int xWin, yWin;
 
-
+	int level;
 	int score;
 	Uint32 superPacmanTimer;
 	bool superPacman;

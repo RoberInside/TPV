@@ -67,7 +67,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCharacter.cpp" />
     <ClCompile Include="GameMap.cpp" />
@@ -77,7 +76,6 @@
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DataManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCharacter.h" />
     <ClInclude Include="GameMap.h" />

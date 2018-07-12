@@ -358,3 +358,38 @@ void Game::setSuperPacman()
 	superPacman = true;
 }
 
+bool Game::save(const std::string & path)
+{
+	std::ofstream o(path);
+	if (o.fail()) return false;
+	//Save game state
+	o << level << " " << score<<std::endl;
+	//Save map
+	for (auto i = objects.begin(); i != objects.end(); i++)
+		(*i)->saveToFile(o);
+	return true;
+}
+
+bool Game::load(const std::string & path)
+{
+	std::ifstream f(path);
+	if (f.fail) return false;
+	if (strcmp(path.c_str() + (path.size() - 3), "sav"))
+		f >> level >> score;
+	objects.push_back(new GameMap(this));
+	objects.push_back(new Pacman(this));
+	int nghost = 0;
+	bool intelligent = false;
+	f >> nghost;
+	auto it = objects.begin();
+	it++; it++;
+	for (size_t i = 0; i < nghost; i++, it++)
+	{
+		f >> intelligent;
+		objects.push_back((intelligent) ? new IntelligentGhost(this) : new Ghost(this));
+		(*it)->loadFromFile(f);
+	}
+
+	return true;
+}
+
