@@ -1,14 +1,11 @@
 #include "GameMap.h"
 #include "Game.h"
+#include "GameObject.h"
 
 
-GameMap::GameMap(Game * game, int rows, int cols):
-	rows(rows), cols(cols), game(game), food(0)
+GameMap::GameMap(Game * game):
+	GameObject(game), food(0)
 {
-	map = new MapCell*[rows];
-	for (int i = 0; i < rows; i++)
-		map[i] = new MapCell[cols];
-
 	wallTexture = game->loadMapResources(Wall);
 	foodTexture = game->loadMapResources(Food);
 	vitaminTexture = game->loadMapResources(Vitamin);
@@ -37,31 +34,66 @@ void GameMap::setCell(MapCell type, int row, int col)
 	map[row][col] = type;
 }
 
-void GameMap::render(SDL_Renderer * renderer)
+void GameMap::render()
 {
-	SDL_Rect r{ 0,0, game->tileWidth, game->tileHeight };
+	SDL_Rect r{ 0,0, game->getTileWidth(), game->getTileHeight()};
+	SDL_Renderer* tmp = game->getRenderer();
 	for (size_t i = 0; i < cols; i++)
 	{
 		for (size_t j = 0; j < rows; j++)
 		{
-			r.x = i * game->tileWidth;
-			r.y = j * game->tileHeight;
+			r.x = i * game->getTileWidth();
+			r.y = j * game->getTileWidth();
 			switch (map[j][i])
 			{
 			case Wall:
-				wallTexture->render(renderer, r);
+				wallTexture->render(tmp, r);
 				break;
 			case Food:
-				foodTexture->render(renderer, r);
+				foodTexture->render(tmp, r);
 				break;
 			case Vitamin:
-				vitaminTexture->render(renderer, r);
+				vitaminTexture->render(tmp, r);
 				break;
 			default:
 				break;
 			}
 		}
 	}
+}
+
+void GameMap::update()
+{
+	//No estoy muy seguro de qué tiene que hacer esto pero bueno
+}
+
+bool GameMap::loadFromFile(std::ifstream & f)
+{
+	f >> rows >> cols;
+	initBoard();
+	char buffer;
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++)
+		{
+			f >> buffer;
+			map[i][j] = (MapCell)buffer;
+			if (buffer == Food) food++;
+		}
+	}
+	return true;
+}
+
+bool GameMap::saveToFile(std::ofstream & f)
+{
+	f << rows <<" "<< cols<<std::endl;
+	char buffer;
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols-1; j++) {
+			f << map[i][j] << " ";
+		}
+		f << map[i][cols - 1] << std::endl;
+	}
+	return true;
 }
 
 void GameMap::printCell(int row, int col)
@@ -91,4 +123,11 @@ void GameMap::printCell(int row, int col)
 		break;
 	}
 	std::cout << "Cell " << row<<", " << col<<" is the type: "<< type<<"\n";
+}
+
+void GameMap::initBoard()
+{
+	map = new MapCell*[rows];
+	for (int i = 0; i < rows; i++)
+		map[i] = new MapCell[cols];
 }

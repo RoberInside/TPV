@@ -71,6 +71,7 @@
     <ClCompile Include="GameCharacter.cpp" />
     <ClCompile Include="GameMap.cpp" />
     <ClCompile Include="Ghost.cpp" />
+    <ClCompile Include="IntelligentGhost.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Pacman.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -81,6 +82,7 @@
     <ClInclude Include="GameMap.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Ghost.h" />
+    <ClInclude Include="IntelligentGhost.h" />
     <ClInclude Include="Pacman.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>

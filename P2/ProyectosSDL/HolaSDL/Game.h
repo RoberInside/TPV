@@ -11,8 +11,10 @@
 #include "Pacman.h"
 #include "GameMap.h"
 
-const int NGHOSTS = 4;
 const int TIME_SUPER = 5000;//ms
+
+enum TextureEnum{Characters, Wall, Food, Vitamin};
+const char* texturePaths[] = { "..\\images\\characters.png", "..\\images\\wall.png", "..\\images\\food.png", "..\\images\\vitamin.png" };
 
 class Game
 {
@@ -25,8 +27,8 @@ public:
 	SDL_Window* getWindow() { return window; };
 	SDL_Renderer* getRenderer() { return renderer; };
 	Texture* loadMapResources(MapCell cellType);
-	int tileWidth;
-	int tileHeight;
+	int getTileWidth() { return tileWidth; };
+	int getTileHeight() { return tileHeight; };
 private:
 
 	bool initSDL();
@@ -39,7 +41,7 @@ private:
 	bool initPacman(int x, int y);
 
 	bool initGhost(int i, int x, int y);
-	void initMap(std::string levelPath);
+	void initTextures();
 	bool collision(Ghost* ghost);
 	void rollBorders();
 
@@ -54,14 +56,14 @@ private:
 	bool error, exit, gameover, win, pause;
 
 	std::list<GameObject*> objects;
+	Pacman*pacman;
 
-	Ghost* ghosts[NGHOSTS];
-	Pacman* pacman;
-	Texture* textures[5];
-	GameMap* map;
+	Texture* textures[4];
+
+	int tileWidth;
+	int tileHeight;
 	const int WIDTH = 800;
 	const int HEIGHT = 600;
-	int xWin, yWin;
 
 	int level;
 	int score;

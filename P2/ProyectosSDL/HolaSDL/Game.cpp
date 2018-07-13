@@ -141,11 +141,8 @@ void Game::update()
 void Game::render()
 {
 	SDL_RenderClear(renderer);
-	map->render(renderer);
-	pacman->render(renderer);
-	for (int i = 0; i < NGHOSTS; i++) 
-			ghosts[i]->render(renderer, 0,(superPacman)? 4 : i);
-
+	for (auto o : objects)
+		o->render();
 	SDL_RenderPresent(renderer);
 }
 
@@ -230,62 +227,10 @@ bool Game::initGhost(int i, int x, int y)
 	return (bool)textures[1];
 }
 
-void Game::initMap(std::string level)
+void Game::initTextures()
 {
-	std::ifstream in;
-	in.open(level);
-	//Debía comprobar que se ha podido abrir correctamente el archivo
-	int rows, cols;
-	in >> rows >> cols;
-	map = new GameMap(this, rows, cols);
-	
-	tileWidth = WIDTH / cols;
-	tileHeight = HEIGHT / rows;
-	
-	char buffer;
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++)
-		{
-			in >> buffer;
-			switch (buffer)
-			{
-			case '0':
-				map->setCell(Empty, i, j);
-				std::cout << "  ";
-				break;
-			case'1':
-				map->setCell(Wall, i, j);
-				std::cout << "[]";
-				break;
-			case'2':
-				map->setCell(Food, i, j);
-				map->food++;
-				std::cout << "* ";
-				break;
-			case'3':
-				map->setCell(Vitamin, i, j);
-				std::cout << "+ ";
-				break;
-			case'4':
-				break;
-			case'5': case'6': case'7': case'8':
-				map->setCell(Empty, i, j);
-				initGhost(buffer - '5', j, i);
-				std::cout << "X ";
-				break;
-			case'9':
-				map->setCell(Empty, i, j);
-				initPacman(j, i);
-				std::cout << "O ";
-				break;
-			default:
-				break;
-			}
-		}
-	std::cout<<"\n";
-	}
-	std::cout << "Pacman spawed at: " << pacman->getX() <<", "<< pacman->getY()<<"||"<<pacman->getCol()<<", "<<pacman->getRow()<<"\n";
 }
+
 
 
 bool Game::collision(Ghost* ghost)
